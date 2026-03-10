@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { AnimatePresence, motion, Reorder } from 'framer-motion';
-import { PlusIcon, RotateCcwIcon, TrashIcon } from 'lucide-react';
+import { PlusIcon, TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Divider from '@/components/ui/Divider';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { DocSnapshot, getSnapshotAtTime } from '@/core/doc/raw-doc';
-import { resetAllSlices, useStore } from '@/store';
+import { useStore } from '@/store';
 
 function Slider() {
   const [items, setItems] = useState([1, 2, 3]);
@@ -96,7 +96,7 @@ function SlideActions({ snapshots }: SlideActionsProps) {
   return (
     <div className="flex w-full flex-wrap gap-4">
       <Button
-        className="grow rounded bg-slate-800 px-3"
+        className="w-full rounded bg-slate-800 px-3"
         variant={'secondary'}
         title={`Duplicate Slide#${snapshots.length - 1}`}
         onClick={() => {
@@ -104,14 +104,6 @@ function SlideActions({ snapshots }: SlideActionsProps) {
         }}
       >
         <PlusIcon className="w-5 text-slate-400" />
-      </Button>
-      <Button
-        className="grow rounded px-3"
-        variant={'secondary'}
-        title="Factory reset"
-        onClick={() => resetAllSlices()}
-      >
-        <RotateCcwIcon className="w-5 bg-slate-800 text-slate-400" />
       </Button>
     </div>
   );

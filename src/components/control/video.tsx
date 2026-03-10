@@ -4,6 +4,13 @@ import { useStore } from '@/store';
 import { VideoExport } from '../preview/export';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 export function VideoTab() {
   const { doc, updateDocProperties, updateSnapshot } = useStore((state) => ({
@@ -35,6 +42,7 @@ export function VideoTab() {
   const [itemDisplayDurationInput, setItemDisplayDurationInput] = useState(
     String(itemDisplayDurationSeconds),
   );
+  const [exportFormat, setExportFormat] = useState<'webm' | 'mp4'>('mp4');
 
   useEffect(() => {
     setTransitionDurationInput(String(transitionDurationSeconds));
@@ -103,6 +111,21 @@ export function VideoTab() {
         />
       </li>
       <li>
+        <Label htmlFor="export-format">export format</Label>
+        <Select
+          value={exportFormat}
+          onValueChange={(value) => setExportFormat(value as 'webm' | 'mp4')}
+        >
+          <SelectTrigger id="export-format">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="mp4">MP4</SelectItem>
+            <SelectItem value="webm">WebM</SelectItem>
+          </SelectContent>
+        </Select>
+      </li>
+      <li>
         <Label htmlFor="transition-duration" title="second">
           transition duration <sup>s</sup>
         </Label>
@@ -143,7 +166,7 @@ export function VideoTab() {
         />
       </li>
       <li>
-        <VideoExport />
+        <VideoExport exportFormat={exportFormat} />
       </li>
     </ul>
   );

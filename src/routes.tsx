@@ -2,10 +2,8 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LayoutComponent from '@/layout';
 
-const Home = lazy(() => import('@/pages/home'));
 const Studio = lazy(() => import('@/pages/studio'));
 const NotFound = lazy(() => import('@/pages/not-found'));
-const ComingSoon = lazy(() => import('@/pages/coming-soon'));
 
 const routes = [
   {
@@ -14,19 +12,11 @@ const routes = [
     children: [
       {
         path: '',
-        element: <Home />,
+        element: <Studio />,
       },
       {
         path: 'studio',
         element: <Studio />,
-      },
-      {
-        path: 'about',
-        element: <ComingSoon />,
-      },
-      {
-        path: 'support',
-        element: <ComingSoon />,
       },
       {
         path: '*',

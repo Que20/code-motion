@@ -9,8 +9,6 @@ import {
   type RawDoc,
 } from '../core/doc/raw-doc';
 
-import { sliceResetFns } from '.';
-
 export interface AppSliceState {
   doc: RawDoc;
   currentTime: number;
@@ -122,9 +120,7 @@ export const createAppSlice: StateCreator<
   [],
   [],
   AppSliceState & AppSliceAction
-> = (set, get) => (
-  sliceResetFns.add(() => set(initialState)),
-  {
+> = (set, get) => ({
     ...initialState,
 
     updateSnapshot(index, snapshot) {

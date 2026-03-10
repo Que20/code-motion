@@ -7,7 +7,11 @@ import { convertWebmToMp4 } from '@/utils/video-convert';
 
 import { Button } from '../ui/button';
 
-export function VideoExport() {
+interface VideoExportProps {
+  exportFormat: 'webm' | 'mp4';
+}
+
+export function VideoExport({ exportFormat }: VideoExportProps) {
   const [isConverting, setIsConverting] = useState(false);
   const { encodeState, startEncodeTask, abortEncodeTask } = useStore(
     (state) => ({
@@ -33,13 +37,17 @@ export function VideoExport() {
           type: encodeState.result.type,
           size: encodeState.result.size,
         });
-        setIsConverting(true);
-        const mp4Blob = await convertWebmToMp4(encodeState.result);
-        console.info('[VideoExport] Converted MP4 ready for download.', {
-          type: mp4Blob.type,
-          size: mp4Blob.size,
-        });
-        downloadBlob(mp4Blob, `code_motion-${dateFilename()}.mp4`);
+        if (exportFormat === 'mp4') {
+          setIsConverting(true);
+          const mp4Blob = await convertWebmToMp4(encodeState.result);
+          console.info('[VideoExport] Converted MP4 ready for download.', {
+            type: mp4Blob.type,
+            size: mp4Blob.size,
+          });
+          downloadBlob(mp4Blob, `code_motion-${dateFilename()}.mp4`);
+        } else {
+          downloadBlob(encodeState.result, `code_motion-${dateFilename()}.webm`);
+        }
         abortEncodeTask();
       } catch (error) {
         console.error('[VideoExport] Failed to download the encoded video.', error);
@@ -60,12 +68,15 @@ export function VideoExport() {
   const progressPercent = `${Math.round(progress * 100)}%`;
 
   return (
-    <Button
-      className="felx relative w-full gap-1.5 font-normal"
+      <Button
+      className={`felx relative w-full gap-1.5 font-normal ${
+        isConverting ? 'cursor-not-allowed' : ''
+      }`}
       variant="secondary"
       title={
         encodeState?.status === EncodeStatus.Encoding ? 'Click to cancel' : ''
       }
+      disabled={isConverting}
       onClick={handleClick}
     >
       <DownloadIcon className="w-5" />

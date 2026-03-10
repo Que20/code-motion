@@ -17,7 +17,7 @@ const Studio = () => {
       <ResizablePanel
         id="sidebar"
         defaultSize={12}
-        collapsible={true}
+        collapsible={false}
         collapsedSize={0}
         minSize={6}
       >
@@ -35,8 +35,8 @@ const Studio = () => {
       <ResizablePanel
         id="control"
         defaultSize={18}
-        collapsible={true}
-        collapsedSize={0}
+        collapsible={false}
+        collapsedSize={16}
         minSize={16}
         maxSize={20}
       >
