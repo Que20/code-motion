@@ -20,8 +20,18 @@ export function VideoExport() {
     } else if (encodeState.status === EncodeStatus.Encoding) {
       abortEncodeTask();
     } else if (encodeState.status === EncodeStatus.Done) {
-      downloadBlob(encodeState.result, `code_motion-${dateFilename()}.webm`);
-      abortEncodeTask();
+      try {
+        const extension = encodeState.result.type.includes('mp4')
+          ? 'mp4'
+          : 'webm';
+        downloadBlob(
+          encodeState.result,
+          `code_motion-${dateFilename()}.${extension}`,
+        );
+        abortEncodeTask();
+      } catch (error) {
+        console.error('[VideoExport] Failed to download the encoded video.', error);
+      }
     }
   };
 

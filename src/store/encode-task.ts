@@ -73,6 +73,8 @@ export const createEncodeSlice: StateCreator<
       .catch((err) => {
         if (err?.message === 'Aborted') return;
 
+        console.error('[VideoExport] Video encoding failed.', err);
+
         set({ encodeState: { status: EncodeStatus.Error, error: err } });
       });
 
