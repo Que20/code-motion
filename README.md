@@ -1,33 +1,14 @@
-<div align="center">
-  <h2>
-    An effortless video code diff-animation tool for visualizing code changes
-  </h2>
-</div>
-
-<div align="center">
-  <figure>
-    <a href="https://code-motion.vercel.app/" target="_blank" rel="noopener">
-			<img alt="Code-Motion" src='./src/assets/studio.webp'>
-		</a>
-    <figcaption>
-      <p align="center">
-        Present your code like never before.
-      </p>
-    </figcaption>
-  </figure>
-</div>
+# Code-motion
+An effortless video code diff-animation tool for visualizing code changes
 
 ## Features
 
 - 💯 Free & open-source
-- 🤩 diff animation ([example](https://code-motion.vercel.app/assets/diff-anim-example-CQZ8pw7x.webm))
+- 🤩 diff animation
 - 🏗️ canvas-based video
 - 🎬 preview player
 - 🖼️ Export video to mp4 (webm -> mp4 conversion at download time)
 - ✍️ in-browser code editor
-- 🎨 Customizable
-- 📷 capture screenshots
-- 🌓 Dark mode
 
 ## About This Fork
 
