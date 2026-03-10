@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { DownloadIcon } from 'lucide-react';
 import { useStore } from '@/store';
 import { EncodeStatus } from '@/store/encode-task';
 import { dateFilename, downloadBlob } from '@/utils/download';
+import { convertWebmToMp4 } from '@/utils/video-convert';
 
 import { Button } from '../ui/button';
 
 export function VideoExport() {
+  const [isConverting, setIsConverting] = useState(false);
   const { encodeState, startEncodeTask, abortEncodeTask } = useStore(
     (state) => ({
       encodeState: state.encodeState,
@@ -14,23 +17,35 @@ export function VideoExport() {
     }),
   );
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    if (isConverting) {
+      console.info('[VideoExport] Ignoring click while conversion is running.');
+      return;
+    }
+
     if (encodeState == null || encodeState.status === EncodeStatus.Error) {
       startEncodeTask();
     } else if (encodeState.status === EncodeStatus.Encoding) {
       abortEncodeTask();
     } else if (encodeState.status === EncodeStatus.Done) {
       try {
-        const extension = encodeState.result.type.includes('mp4')
-          ? 'mp4'
-          : 'webm';
-        downloadBlob(
-          encodeState.result,
-          `code_motion-${dateFilename()}.${extension}`,
-        );
+        console.info('[VideoExport] Download button clicked with encoded result.', {
+          type: encodeState.result.type,
+          size: encodeState.result.size,
+        });
+        setIsConverting(true);
+        const mp4Blob = await convertWebmToMp4(encodeState.result);
+        console.info('[VideoExport] Converted MP4 ready for download.', {
+          type: mp4Blob.type,
+          size: mp4Blob.size,
+        });
+        downloadBlob(mp4Blob, `code_motion-${dateFilename()}.mp4`);
         abortEncodeTask();
       } catch (error) {
         console.error('[VideoExport] Failed to download the encoded video.', error);
+      } finally {
+        console.info('[VideoExport] Conversion flow ended.');
+        setIsConverting(false);
       }
     }
   };
@@ -57,6 +72,8 @@ export function VideoExport() {
       <span>
         {encodeState == null
           ? 'Export'
+          : isConverting
+            ? 'Converting...'
           : encodeState.status === EncodeStatus.Done
             ? 'Download'
             : encodeState.status === EncodeStatus.Encoding
