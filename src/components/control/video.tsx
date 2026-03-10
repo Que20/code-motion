@@ -26,13 +26,23 @@ export function VideoTab() {
   const handleFontSizeChange = handlePropertyChange('fontSize', parseInt);
   const transitionDurationSeconds =
     (doc.snapshots[0]?.transitionTime ?? 1000) / 1000;
+  const itemDisplayDurationSeconds =
+    ((doc.snapshots[0]?.duration ?? 0) - (doc.snapshots[0]?.transitionTime ?? 0)) /
+    1000;
   const [transitionDurationInput, setTransitionDurationInput] = useState(
     String(transitionDurationSeconds),
+  );
+  const [itemDisplayDurationInput, setItemDisplayDurationInput] = useState(
+    String(itemDisplayDurationSeconds),
   );
 
   useEffect(() => {
     setTransitionDurationInput(String(transitionDurationSeconds));
   }, [transitionDurationSeconds]);
+
+  useEffect(() => {
+    setItemDisplayDurationInput(String(itemDisplayDurationSeconds));
+  }, [itemDisplayDurationSeconds]);
 
   const applyTransitionDuration = (value: string) => {
     const seconds = parseFloat(value);
@@ -54,6 +64,28 @@ export function VideoTab() {
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setTransitionDurationInput(e.target.value);
+  };
+
+  const applyItemDisplayDuration = (value: string) => {
+    const seconds = parseFloat(value);
+    if (!Number.isFinite(seconds)) {
+      return;
+    }
+
+    const displayTime = Math.max(0, seconds * 1000);
+
+    doc.snapshots.forEach((snapshot, index) => {
+      updateSnapshot(index, {
+        ...snapshot,
+        duration: displayTime + snapshot.transitionTime,
+      });
+    });
+  };
+
+  const handleItemDisplayDurationChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setItemDisplayDurationInput(e.target.value);
   };
 
   return (
@@ -85,6 +117,26 @@ export function VideoTab() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               applyTransitionDuration(transitionDurationInput);
+              e.currentTarget.blur();
+            }
+          }}
+        />
+      </li>
+      <li>
+        <Label htmlFor="item-display-duration" title="second">
+          item display duration <sup>s</sup>
+        </Label>
+        <Input
+          id="item-display-duration"
+          type="number"
+          min={0}
+          step={0.01}
+          value={itemDisplayDurationInput}
+          onChange={handleItemDisplayDurationChange}
+          onBlur={() => applyItemDisplayDuration(itemDisplayDurationInput)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              applyItemDisplayDuration(itemDisplayDurationInput);
               e.currentTarget.blur();
             }
           }}
