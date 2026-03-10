@@ -23,11 +23,28 @@
 - 🤩 diff animation ([example](https://code-motion.vercel.app/assets/diff-anim-example-CQZ8pw7x.webm))
 - 🏗️ canvas-based video
 - 🎬 preview player
-- 🖼️ Export video to webm
+- 🖼️ Export video to mp4 (webm -> mp4 conversion at download time)
 - ✍️ in-browser code editor
 - 🎨 Customizable
 - 📷 capture screenshots
 - 🌓 Dark mode
+
+## About This Fork
+
+This repository is a vibe-coded fork of the original [code-motion](https://github.com/amasin76/code-motion).
+
+Changes added in this fork:
+
+- Fixed the video download flow so export is more reliable
+- Added MP4 export by converting the generated WebM with FFmpeg at download time
+- Replaced the old FPS control with a transition duration control
+- Added snapshot/item display duration control (time shown before transitioning)
+
+## TODO
+
+- Video aspect ratio presets (square, portrait, landscape)
+- Background color customization
+- Visual effects on the video (for example: borders)
 
 ## Use Cases
 
@@ -78,19 +95,3 @@ After running the app either locally or in docker, navigate to http://localhost:
 - CodeMirror : A code editor component for the web.
 - DiffJs : A text differencing implementation based on the O(ND)Algorithm.
 - PrismJs : A syntax highlighting library for code blocks
-
-## Privacy
-
-App is designed to be offline-first, meaning that it does not rely on any external servers or backdoors,
-
-However, code motion utilizes Vercel Basic Analytics:  
-but only stores anonymized data, and does not use cookies [more info](https://vercel.com/docs/analytics#how-visitors-are-determined)
-
-## Contributing
-
-- Found a bug? [Report here](https://github.com/amasin76/code-motion/issues/new/choose).
-- Feature missing? [Request here](https://github.com/amasin76/code-motion/issues/new/choose).
-
-## Like Code Motion?
-
-Don't forget to star the repository! ⭐️
